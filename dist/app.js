@@ -33,6 +33,7 @@ const ui = {
 const STORAGE_KEY = "lucky-bunny-draw.v1";
 const MAX_NUMBER = 999;
 const motion = matchMedia("(prefers-reduced-motion: reduce)");
+const { randomIndex, wireToolbar, wireLever } = window.luckyDrawControls;
 
 function makeRange(first, last) {
   return Array.from({ length: last - first + 1 }, (_, index) => first + index);
@@ -43,7 +44,7 @@ function validNumber(value) {
 }
 
 function loadGame() {
-  const initial = { kind: "range", pool: makeRange(1, 20), history: [], repeat: false, sound: true };
+  const initial = { kind: "range", pool: makeRange(1, 20), history: [], repeat: false };
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
     if (!saved || !Array.isArray(saved.pool) || !saved.pool.length ||
@@ -53,7 +54,7 @@ function loadGame() {
     const seen = new Set(pool);
     const kind = saved.kind === "range" && pool.at(-1) - pool[0] + 1 === pool.length ? "range" : "list";
     const history = Array.isArray(saved.history) ? saved.history.filter((value) => seen.has(value)) : [];
-    return { kind, pool, history, repeat: saved.repeat === true, sound: saved.sound !== false };
+    return { kind, pool, history, repeat: saved.repeat === true };
   } catch {
     return initial;
   }
@@ -64,7 +65,6 @@ let available = [];
 let mode = game.kind;
 let spin = null;
 let animationFrame = 0;
-let drag = null;
 let confirmAction = null;
 let confettiTimer = 0;
 
@@ -74,15 +74,6 @@ function saveGame() {
   } catch {
     // The current draw remains usable when browser storage is unavailable.
   }
-}
-
-function randomIndex(size) {
-  const entropy = new Uint32Array(1);
-  const bound = 0x100000000 - (0x100000000 % size);
-  do {
-    crypto.getRandomValues(entropy);
-  } while (entropy[0] >= bound);
-  return entropy[0] % size;
 }
 
 function updateAvailable() {
@@ -265,50 +256,6 @@ ui.repeat.addEventListener("change", () => {
   saveGame();
 });
 
-let audio;
-
-function unlockAudio() {
-  if (!game.sound || !window.AudioContext) return;
-  try {
-    audio ||= new AudioContext();
-    if (audio.state === "suspended") audio.resume().catch(() => {});
-  } catch {
-    // Animation carries the same feedback when audio is unavailable.
-  }
-}
-
-function tone(frequency, endFrequency, length, volume, type = "sine", delay = 0) {
-  if (!game.sound || !audio || audio.state !== "running") return;
-  const start = audio.currentTime + delay;
-  const osc = audio.createOscillator();
-  const gain = audio.createGain();
-  osc.type = type;
-  osc.frequency.setValueAtTime(frequency, start);
-  osc.frequency.exponentialRampToValueAtTime(endFrequency, start + length);
-  gain.gain.setValueAtTime(.001, start);
-  gain.gain.exponentialRampToValueAtTime(volume, start + .008);
-  gain.gain.exponentialRampToValueAtTime(.001, start + length);
-  osc.connect(gain).connect(audio.destination);
-  osc.start(start);
-  osc.stop(start + length + .015);
-}
-
-function renderSound() {
-  ui.sound.setAttribute("aria-pressed", game.sound);
-  ui.sound.querySelector("use").setAttribute("href", game.sound ? "#icon-sound" : "#icon-muted");
-  ui.sound.querySelector("span").textContent = game.sound ? "소리 켜짐" : "소리 꺼짐";
-}
-
-ui.sound.addEventListener("click", () => {
-  game.sound = !game.sound;
-  if (game.sound) {
-    unlockAudio();
-    tone(620, 780, .14, .065, "triangle");
-  }
-  renderSound();
-  saveGame();
-});
-
 function celebrate() {
   if (motion.matches) return;
   clearTimeout(confettiTimer);
@@ -367,10 +314,6 @@ function spinFrame(now) {
   if (spin) animationFrame = requestAnimationFrame(spinFrame);
 }
 
-function setPull(amount) {
-  ui.machine.style.setProperty("--pull", amount);
-}
-
 function startDraw(pulled = false) {
   if (spin || !available.length || ui.confirm.open) return;
   unlockAudio();
@@ -383,76 +326,29 @@ function startDraw(pulled = false) {
     nextTick: 0
   };
   tone(260, 95, .115, .09, "triangle");
-  if (!pulled) setPull(1);
-  setTimeout(() => setPull(0), pulled ? 25 : 150);
+  animatePull(pulled);
   renderDraw();
   animationFrame = requestAnimationFrame(spinFrame);
 }
 
-ui.draw.addEventListener("click", () => startDraw());
-ui.lever.addEventListener("click", (event) => {
-  if (event.detail === 0) startDraw();
+const { unlock: unlockAudio, tone } = wireToolbar({
+  soundButton: ui.sound,
+  fullscreenButton: ui.fullscreen,
+  onDraw: startDraw,
+  canUseShortcuts: () => !ui.confirm.open
 });
 
-ui.lever.addEventListener("pointerdown", (event) => {
-  if (!event.isPrimary || event.button !== 0 || spin || drag || !available.length) return;
-  unlockAudio();
-  ui.lever.setPointerCapture(event.pointerId);
-  drag = { id: event.pointerId, origin: event.clientY, x: event.clientX, amount: 0 };
-  ui.machine.classList.add("is-pulling");
-  tone(215, 170, .065, .05, "triangle");
-});
-
-ui.lever.addEventListener("pointermove", (event) => {
-  if (drag?.id !== event.pointerId) return;
-  const travel = ui.machine.getBoundingClientRect().height * .30;
-  drag.amount = Math.min(1, Math.max(0, (event.clientY - drag.origin) / travel));
-  setPull(drag.amount);
-});
-
-function releaseLever(event, cancelled) {
-  if (drag?.id !== event.pointerId) return;
-  const amount = drag.amount;
-  const distance = Math.hypot(event.clientX - drag.x, event.clientY - drag.origin);
-  drag = null;
-  ui.machine.classList.remove("is-pulling");
-  if (!cancelled && amount >= .65) startDraw(true);
-  else if (!cancelled && distance < 8) startDraw();
-  else setPull(0);
-}
-
-ui.lever.addEventListener("pointerup", (event) => releaseLever(event, false));
-ui.lever.addEventListener("pointercancel", (event) => releaseLever(event, true));
-ui.lever.addEventListener("lostpointercapture", (event) => releaseLever(event, true));
-
-const canFullscreen = document.fullscreenEnabled && Boolean(document.documentElement.requestFullscreen);
-ui.fullscreen.hidden = !canFullscreen;
-
-function toggleFullscreen() {
-  if (!canFullscreen) return;
-  const action = document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
-  action.catch(() => {});
-}
-
-ui.fullscreen.addEventListener("click", toggleFullscreen);
-document.addEventListener("fullscreenchange", () => {
-  const active = Boolean(document.fullscreenElement);
-  const label = active ? "전체 화면 나가기" : "전체 화면";
-  ui.fullscreen.title = label;
-  ui.fullscreen.setAttribute("aria-label", label);
-  ui.fullscreen.querySelector("use").setAttribute("href", active ? "#icon-collapse" : "#icon-expand");
-});
-
-document.addEventListener("keydown", (event) => {
-  if (event.repeat || event.isComposing || event.ctrlKey || event.altKey || event.metaKey || ui.confirm.open) return;
-  if (event.target.closest?.("input, textarea, select, [contenteditable]")) return;
-  if (event.code === "Space" && !event.target.closest?.("button, a")) {
-    event.preventDefault();
-    startDraw();
-  } else if (event.code === "KeyF") {
-    toggleFullscreen();
+const animatePull = wireLever({
+  machine: ui.machine,
+  lever: ui.lever,
+  onDraw: startDraw,
+  onGrab() {
+    unlockAudio();
+    tone(215, 170, .065, .05, "triangle");
   }
 });
+
+ui.draw.addEventListener("click", () => startDraw());
 
 window.render_game_to_text = () => JSON.stringify({
   mode: spin ? "spinning" : available.length ? "ready" : "exhausted",
@@ -476,7 +372,6 @@ ui.to.value = game.pool.at(-1);
 if (game.kind === "list") ui.numbers.value = game.pool.join(", ");
 ui.repeat.checked = game.repeat;
 chooseMode(game.kind);
-renderSound();
 updateAvailable();
 renderPool();
 renderDraw();

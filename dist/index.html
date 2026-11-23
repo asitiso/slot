@@ -8,6 +8,7 @@
   <title>행운 뽑기</title>
   <link rel="icon" href="assets/lucky-bunny.webp" type="image/webp">
   <link rel="stylesheet" href="style.css">
+  <script src="draw-controls.js" defer></script>
   <script src="app.js" defer></script>
 </head>
 <body>
@@ -27,7 +28,10 @@
 
   <header class="topbar">
     <div class="topbar-inner">
-      <div class="brand"><span class="brand-icon"><svg class="icon" aria-hidden="true"><use href="#icon-spark"/></svg></span><span>행운 뽑기</span></div>
+      <nav class="game-nav" aria-label="뽑기 메뉴">
+        <a class="game-link" href="index.html" aria-current="page"><span class="brand-icon"><svg class="icon" aria-hidden="true"><use href="#icon-spark"/></svg></span><span>행운 뽑기</span></a>
+        <a class="game-link" href="charm.html">부적 뽑기</a>
+      </nav>
       <div class="toolbar">
         <button id="sound" type="button" class="tool-button" aria-label="효과음" aria-pressed="true" title="효과음">
           <svg class="icon" aria-hidden="true"><use href="#icon-sound"/></svg><span>소리 켜짐</span>
