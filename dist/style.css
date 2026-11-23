@@ -276,3 +276,12 @@ dialog p { margin: 9px 0 18px; color: var(--muted); line-height: 1.65; word-brea
   .tool-button { min-width: 38px; gap: 5px; padding-inline: 7px; }
 }
 @media (max-width: 350px) { .toolbar #sound span { display: none; } }
+@media (max-width: 485px) {
+  .toolbar #sound span { display: none; }
+}
+@media (max-width: 380px) {
+  .game-link, .game-link:first-child { padding-inline: 5px; font-size: 14px; }
+  .game-link:not([aria-current="page"]):first-child { padding-left: 0; }
+  .game-link .brand-icon { display: none; }
+  .toolbar .tool-button { min-width: 35px; padding-inline: 5px; }
+}

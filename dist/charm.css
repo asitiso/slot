@@ -191,3 +191,9 @@ html:has(.charm-page) { background: #171021; }
   .catalog-label { display: grid; align-items: center; min-height: 2.9em; font-size: 12px; }
 }
 @media (prefers-reduced-motion: reduce) { .reveal-flare { display: none; } }
+/* The display and the lever mount align with the screen and edges of the tiger-and-magpie cabinet. */
+.charm-page .charm-reels { top: 46.5%; left: 21.8%; width: 50.4%; height: 24.2%; padding: .55cqw 1cqw; }
+.charm-page .charm-lever-mount { left: 78.5%; width: 15.6%; }
+.charm-page .charm-lever > span { background: radial-gradient(ellipse at 29% 22%, #edfff2 1%, #97c9ad 15%, #588a80 35%, #27534c 64%, #132b32 91%); box-shadow: 0 0 1.6cqw #b6dfb78a, inset -.3cqw -.3cqw #293c3c9e, .6cqw .9cqw #21182d76; }
+.charm-page .reveal-flare { top: 45%; height: 27%; }
+.charm-page .moon-orbit { background: radial-gradient(circle, #d990713d 0, #55939327 57%, transparent 72%); }
