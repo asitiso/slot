@@ -21,6 +21,7 @@
     <symbol id="icon-expand" viewBox="0 0 24 24"><path d="M9 4H4v5m11-5h5v5M4 15v5h5m11 5v-5h5"/></symbol>
     <symbol id="icon-collapse" viewBox="0 0 24 24"><path d="M4 9h5V4m11 5h-5V4M9 20v-5H4m11 5v-5h5"/></symbol>
     <symbol id="icon-download" viewBox="0 0 24 24"><path d="M12 3v12m-4-4 4 4 4-4M5 15v5h14v-5"/></symbol>
+    <symbol id="icon-reset" viewBox="0 0 24 24"><path d="M4 10a8 8 0 1 1 .5 6m-.5-6V5m0 5h5"/></symbol>
     <symbol id="icon-down" viewBox="0 0 24 24"><path d="M12 4v14m-5-5 5 5 5-5"/></symbol>
   </svg>
 
@@ -93,7 +94,10 @@
     </div>
 
     <section class="charm-catalog" aria-labelledby="catalog-title">
-      <h2 id="catalog-title">봉인된 부적 <span id="catalog-count">0 / 8 공개</span></h2>
+      <div class="catalog-heading">
+        <h2 id="catalog-title" tabindex="-1">봉인된 부적 <span id="catalog-count">0 / 8 공개</span></h2>
+        <button id="charm-reset" class="reset-button catalog-reset" type="button" disabled><svg class="icon" aria-hidden="true"><use href="#icon-reset"/></svg>부적 초기화</button>
+      </div>
       <p class="catalog-lead">단서만 살짝 살펴보세요. 뽑은 부적의 봉인이 풀려요.</p>
       <ul id="catalog-list"></ul>
       <p class="charm-credit">한국 전통 부적의 종이와 붓선을 참고해 그린 창작 부적이에요. <a href="https://encykorea.aks.ac.kr/Article/E0024533" target="_blank" rel="noopener">전통 부적 알아보기</a></p>

@@ -27,6 +27,7 @@ const resultName = $("result-name");
 const resultCategory = $("result-category");
 const resultMessage = $("result-message");
 const download = $("charm-download");
+const reset = $("charm-reset");
 const catalogCards = new Map();
 const revealedCharms = new Set();
 const reelMarks = ["✧", "☾", "◇", "✦"];
@@ -67,7 +68,7 @@ function renderCatalog() {
     catalogCards.set(charm.id, { item, back, label });
     return item;
   });
-  $("catalog-list").append(...entries);
+  $("catalog-list").replaceChildren(...entries);
 }
 
 function openSeal(charm) {
@@ -110,6 +111,7 @@ function completeSpin() {
   stage.setAttribute("aria-busy", "false");
   draw.disabled = false;
   lever.disabled = false;
+  reset.disabled = false;
   drawLabel.textContent = "다시 뽑기";
   status.textContent = charm.name + "이 나왔어요.";
 
@@ -168,6 +170,7 @@ function startDraw(pulled = false) {
   stage.setAttribute("aria-busy", "true");
   draw.disabled = true;
   lever.disabled = true;
+  reset.disabled = true;
   drawLabel.textContent = "뽑는 중…";
   status.textContent = "릴이 돌고 있어요…";
   resultArt.hidden = true;
@@ -212,6 +215,39 @@ download.addEventListener("click", async (event) => {
     // Let the browser try a direct download if fetching the image fails.
   }
   file.click();
+});
+
+reset.addEventListener("click", () => {
+  if (spin || !lastDraw) return;
+
+  lastDraw = null;
+  drawCount = 0;
+  revealedCharms.clear();
+  renderCatalog();
+
+  stage.classList.remove("is-revealed");
+  result.classList.remove("is-revealed");
+  reelCells.forEach((cell, index) => {
+    showOnReel(cell, null);
+    cell.mark.textContent = index === 1 ? "☾" : "✧";
+  });
+
+  drawLabel.textContent = "부적 뽑기";
+  status.textContent = "레버를 당겨 부적 한 장을 뽑아요.";
+  resultArt.hidden = true;
+  resultArt.removeAttribute("src");
+  resultArt.alt = "";
+  resultBack.hidden = false;
+  resultCategory.hidden = true;
+  resultCategory.textContent = "";
+  resultName.textContent = "어떤 부적이 나올까요?";
+  resultMessage.textContent = "뽑은 부적은 이미지로 간직할 수 있어요.";
+  download.hidden = true;
+  download.removeAttribute("href");
+  download.removeAttribute("download");
+
+  $("catalog-title").focus({ preventScroll: true });
+  reset.disabled = true;
 });
 
 draw.addEventListener("click", () => startDraw());

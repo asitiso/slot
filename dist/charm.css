@@ -141,12 +141,15 @@ html:has(.charm-page) { background: #171021; }
 .charm-download .icon { width: 18px; height: 18px; }
 
 .charm-catalog { margin-top: 23px; }
-.charm-catalog h2 { display: flex; align-items: center; gap: 8px; margin: 0 0 11px; font-size: 20px; line-height: 1.45; letter-spacing: -.05em; }
+.catalog-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 5px; }
+.charm-catalog h2 { display: flex; flex-wrap: wrap; align-items: center; gap: 3px 8px; margin: 0; font-size: 20px; line-height: 1.45; letter-spacing: -.05em; }
+.catalog-reset { flex: none; min-height: 44px; margin: 0; padding: 4px 7px; border-radius: 8px; color: #f3d6a1; }
+.catalog-reset:hover:not(:disabled) { color: #fff1d5; background: #48304c; text-decoration: none; }
 .charm-catalog h2 span { display: inline-block; margin-left: 3px; color: #e9c996; font-size: 14px; font-weight: 850; letter-spacing: 0; }
 .charm-catalog ul { display: grid; grid-template-columns: repeat(8,minmax(0,1fr)); gap: 8px; margin: 0; padding: 0; list-style: none; }
 .charm-catalog li { display: grid; place-items: center; gap: 8px; min-width: 0; padding: 11px 5px 10px; border: 1px solid #5f495e; border-radius: 11px; background: radial-gradient(ellipse at 50% 26%, #5b3e57, #2c1e3b 71%); }
 .charm-catalog li img { display: block; width: auto; height: 68px; max-width: 75%; object-fit: contain; filter: drop-shadow(0 4px 4px #11081b9c); }
-.catalog-lead { margin: -5px 0 13px; color: #ddcce6; font-size: 14px; line-height: 1.5; }
+.catalog-lead { margin: 0 0 13px; color: #ddcce6; font-size: 14px; line-height: 1.5; }
 .catalog-label { min-height: 1.5em; color: #f6deb8; text-align: center; font-size: 14px; font-weight: 800; line-height: 1.45; word-break: keep-all; }
 .catalog-back { height: 68px; }
 .catalog-back > span { font-size: 19px; }
