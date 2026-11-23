@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fbf8f2">
+  <meta name="description" content="원하는 숫자를 넣고 레버를 당기는 전 연령용 숫자 제비뽑기">
+  <title>행운 뽑기</title>
+  <link rel="icon" href="assets/lucky-bunny.webp" type="image/webp">
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="icon-spark" viewBox="0 0 24 24"><path d="M12 2.5 14.6 9.4 21.5 12l-6.9 2.6-2.6 6.9-2.6-6.9L2.5 12l6.9-2.6L12 2.5Z"/></symbol>
+    <symbol id="icon-sound" viewBox="0 0 24 24"><path d="M3 9v6h4l5 4V5L7 9H3Zm13 0a4 4 0 0 1 0 6m2.6-8.6a8 8 0 0 1 0 11.2"/></symbol>
+    <symbol id="icon-muted" viewBox="0 0 24 24"><path d="M3 9v6h4l5 4V5L7 9H3Zm13 1 5 5m0-5-5 5"/></symbol>
+    <symbol id="icon-expand" viewBox="0 0 24 24"><path d="M9 4H4v5m11-5h5v5M4 15v5h5m11-5v5h-5"/></symbol>
+    <symbol id="icon-collapse" viewBox="0 0 24 24"><path d="M4 9h5V4m11 5h-5V4M9 20v-5H4m11 5v-5h5"/></symbol>
+    <symbol id="icon-sliders" viewBox="0 0 24 24"><path d="M4 7h5m4 0h7M4 17h9m4 0h3"/><circle cx="11" cy="7" r="2"/><circle cx="15" cy="17" r="2"/></symbol>
+    <symbol id="icon-ticket" viewBox="0 0 24 24"><path d="M3 6h18v4a2 2 0 1 0 0 4v4H3v-4a2 2 0 1 0 0-4V6Zm11 2v1m0 3v1m0 3v1"/></symbol>
+    <symbol id="icon-reset" viewBox="0 0 24 24"><path d="M4 10a8 8 0 1 1 .5 6m-.5-6V5m0 5h5"/></symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="icon-down" viewBox="0 0 24 24"><path d="M12 4v14m-5-5 5 5 5-5"/></symbol>
+    <symbol id="icon-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+  </svg>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand"><span class="brand-icon"><svg class="icon" aria-hidden="true"><use href="#icon-spark"/></svg></span><span>행운 뽑기</span></div>
+      <div class="toolbar">
+        <button id="sound" type="button" class="tool-button" aria-label="효과음" aria-pressed="true" title="효과음">
+          <svg class="icon" aria-hidden="true"><use href="#icon-sound"/></svg><span>소리 켜짐</span>
+        </button>
+        <button id="fullscreen" type="button" class="tool-button fullscreen-button" aria-label="전체 화면" title="전체 화면">
+          <svg class="icon" aria-hidden="true"><use href="#icon-expand"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="layout">
+    <div class="intro">
+      <h1>행운 뽑기<span aria-hidden="true">!</span></h1>
+      <p>원하는 숫자를 넣고 레버를 당겨보세요.</p>
+    </div>
+
+    <div class="board">
+      <section class="stage" aria-labelledby="play-title">
+        <h2 id="play-title" class="sr-only">번호 뽑기</h2>
+        <div class="stage-top">
+          <div class="remaining"><span class="remaining-dot"></span><span id="remaining-label">남은 번호</span><strong id="remaining">20</strong>개</div>
+        </div>
+
+        <div class="machine" id="machine">
+          <div class="machine-art" aria-hidden="true">
+            <div class="halo"></div>
+            <span class="stage-star star-one">✦</span><span class="stage-star star-two">✧</span>
+            <span class="stage-star star-three">✦</span><span class="stage-star star-four">✧</span>
+            <span class="stage-star star-five">✦</span><span class="stage-star star-six">✧</span>
+            <span class="stage-dot dot-one"></span><span class="stage-dot dot-two"></span><span class="stage-dot dot-three"></span>
+            <div class="machine-shadow"></div>
+            <img class="mascot" src="assets/lucky-bunny.webp" alt="" draggable="false" fetchpriority="high">
+            <div class="machine-body">
+              <div class="cabinet-panel">
+                <span class="screw screw-left"></span><span class="screw screw-right"></span>
+                <div class="marquee"><span>✦</span><strong>LUCKY DRAW</strong><span>✦</span></div>
+                <div class="machine-lights"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                <div class="window-frame">
+                  <div class="side-reel left-reel"><span>✦</span></div>
+                  <div class="reel"><span id="reel-value" class="reel-value">?</span></div>
+                  <div class="side-reel right-reel"><span>✦</span></div>
+                </div>
+                <div class="lower-panel"><span class="speaker"></span><span class="tray"><span></span></span><span class="speaker"></span></div>
+              </div>
+            </div>
+            <div class="machine-foot"></div>
+            <div class="lever-mount"></div>
+            <div class="lever-arm"></div>
+            <span class="lever-glint">✧</span>
+            <div class="pull-label"><svg class="icon"><use href="#icon-down"/></svg>당겨요!</div>
+          </div>
+          <button id="lever" class="lever-button" type="button" aria-label="레버 당겨서 번호 뽑기"><span class="lever-knob" aria-hidden="true"></span></button>
+          <div id="confetti" class="confetti" aria-hidden="true"></div>
+        </div>
+
+        <div class="play-controls">
+          <p id="play-status" class="play-status" role="status">레버를 당겨 번호를 뽑아요!</p>
+          <button id="draw" type="button" class="button primary draw-button"><svg class="icon" aria-hidden="true"><use href="#icon-spark"/></svg><span>번호 뽑기</span></button>
+          <p class="keyboard-hint"><kbd>Space</kbd> 키로도 뽑을 수 있어요</p>
+        </div>
+      </section>
+
+      <aside class="sidebar" aria-label="뽑기 설정과 기록">
+        <section class="card settings" aria-labelledby="settings-title">
+          <div class="card-header">
+            <div class="card-icon settings-icon"><svg class="icon" aria-hidden="true"><use href="#icon-sliders"/></svg></div>
+            <h2 id="settings-title">뽑기 설정</h2>
+          </div>
+
+          <p class="current-pool">현재 후보 <strong id="current-pool">1–20</strong></p>
+          <div class="mode-switch" role="group" aria-label="번호 입력 방식">
+            <button type="button" id="range-mode" aria-pressed="true" aria-controls="range-fields">숫자 범위</button>
+            <button type="button" id="list-mode" aria-pressed="false" aria-controls="list-fields">직접 입력</button>
+          </div>
+
+          <form id="settings-form" novalidate>
+            <fieldset id="settings-fields">
+              <legend class="sr-only">후보 번호 설정</legend>
+              <div id="range-fields" class="range-fields">
+                <label for="from">시작 번호<input id="from" type="number" inputmode="numeric" min="0" max="999" step="1" value="1"></label>
+                <span class="range-dash" aria-hidden="true">~</span>
+                <label for="to">끝 번호<input id="to" type="number" inputmode="numeric" min="0" max="999" step="1" value="20"></label>
+              </div>
+              <div id="list-fields" class="list-fields" hidden>
+                <label for="numbers">후보 번호</label>
+                <textarea id="numbers" rows="2" maxlength="10000" placeholder="예: 3, 7, 12, 28" aria-describedby="list-help"></textarea>
+                <small id="list-help">쉼표, 공백이나 줄바꿈으로 번호를 구분해요.</small>
+              </div>
+              <p id="settings-feedback" class="feedback" role="status" hidden></p>
+              <button id="apply" type="submit" class="button apply-button"><svg class="icon" aria-hidden="true"><use href="#icon-check"/></svg>번호 적용</button>
+            </fieldset>
+          </form>
+
+          <label class="repeat-row" for="repeat">
+            <span><strong>중복 허용</strong><small>뽑힌 번호도 다시 뽑을 수 있어요.</small></span>
+            <input type="checkbox" id="repeat" role="switch">
+          </label>
+        </section>
+
+        <section class="card history" aria-labelledby="history-title">
+          <div class="card-header">
+            <div class="card-icon history-icon"><svg class="icon" aria-hidden="true"><use href="#icon-ticket"/></svg></div>
+            <h2 id="history-title">뽑기 기록</h2>
+            <span id="history-count" class="history-count">0회</span>
+          </div>
+          <div id="empty-history" class="empty-history"><span class="empty-ticket" aria-hidden="true"><svg class="icon"><use href="#icon-ticket"/></svg></span><p>아직 뽑힌 번호가 없어요.</p></div>
+          <ol id="history-list" class="history-list" aria-label="최근 뽑은 순서" hidden></ol>
+          <button id="reset" type="button" class="reset-button" hidden><svg class="icon" aria-hidden="true"><use href="#icon-reset"/></svg>기록 초기화</button>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <dialog id="confirm" aria-labelledby="confirm-title" aria-describedby="confirm-detail">
+    <form method="dialog">
+      <div class="dialog-header"><h2 id="confirm-title"></h2><button type="submit" value="cancel" class="tool-button" aria-label="닫기"><svg class="icon" aria-hidden="true"><use href="#icon-close"/></svg></button></div>
+      <p id="confirm-detail"></p>
+      <div class="dialog-actions"><button class="button apply-button" type="submit" value="cancel" autofocus>취소</button><button class="button primary" type="submit" value="confirm" id="confirm-action"></button></div>
+    </form>
+  </dialog>
+</body>
+</html>
