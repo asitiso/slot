@@ -194,6 +194,26 @@ const animatePull = wireLever({
   }
 });
 
+download.addEventListener("click", async (event) => {
+  if (location.protocol === "file:" || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+  event.preventDefault();
+
+  const file = document.createElement("a");
+  file.href = download.href;
+  file.download = download.download;
+  try {
+    const response = await fetch(file.href);
+    if (!response.ok) throw new Error("Image download failed");
+    // A blob URL lets the browser use the displayed name over the server's filename.
+    const blobUrl = URL.createObjectURL(await response.blob());
+    file.href = blobUrl;
+    setTimeout(() => URL.revokeObjectURL(blobUrl), 30000);
+  } catch {
+    // Let the browser try a direct download if fetching the image fails.
+  }
+  file.click();
+});
+
 draw.addEventListener("click", () => startDraw());
 renderCatalog();
 
