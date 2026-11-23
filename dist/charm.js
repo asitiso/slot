@@ -1,14 +1,14 @@
 "use strict";
 
 const charms = [
-  { id: "love", category: "연애운", clue: "마주 본 그림자", name: "인연부", motif: "마주 보는 두 마리 까치와 매듭", wish: "마음이 통하는 인연을 만나길 바라요." },
-  { id: "wealth", category: "금전운", clue: "둥근 금빛", name: "재물부", motif: "곡식 이삭과 엽전 세 닢", wish: "차곡차곡 모은 노력에 풍요가 더해지길 바라요." },
-  { id: "career", category: "출세운", clue: "해가 뜨는 쪽", name: "입신양명부", motif: "떠오르는 해와 날개를 편 학", wish: "실력을 펼칠 기회를 만나고 한 걸음 더 나아가길 바라요." },
-  { id: "exam", category: "합격운", clue: "꽃 핀 책장", name: "합격부", motif: "펼친 책과 꽃 핀 매화 가지", wish: "준비한 만큼 마음껏 실력을 펼치길 바라요." },
-  { id: "health", category: "건강운", clue: "늘 푸른 나무", name: "건강장수부", motif: "소나무와 영지버섯", wish: "몸과 마음이 튼튼하고 일상에 활기가 넘치길 바라요." },
-  { id: "home", category: "가정 평안", clue: "따뜻한 처마", name: "가택평안부", motif: "한옥 지붕과 둥근 구름", wish: "집으로 돌아오는 길 끝에 따뜻한 평안이 있길 바라요." },
-  { id: "protection", category: "액막이", clue: "어둠 속 두 눈", name: "호랑이 액막이부", motif: "정면을 바라보는 민화풍 호랑이", wish: "걱정은 가벼워지고 하루를 씩씩하게 보내길 바라요." },
-  { id: "wish", category: "소원 성취", clue: "달에게 건넨 말", name: "소원성취부", motif: "초승달과 세 개의 별", wish: "오래 품은 소원에 오늘 한 발짝 가까워지길 바라요." }
+  { id: "love", category: "연애운", clue: "마주 본 그림자", name: "인연부적", motif: "마주 보는 두 마리 까치와 매듭", wish: "마음이 통하는 인연을 만나길 바라요." },
+  { id: "wealth", category: "금전운", clue: "둥근 금빛", name: "재물부적", motif: "곡식 이삭과 엽전 세 닢", wish: "차곡차곡 모은 노력에 풍요가 더해지길 바라요." },
+  { id: "career", category: "출세운", clue: "해가 뜨는 쪽", name: "입신양명부적", motif: "떠오르는 해와 날개를 편 학", wish: "실력을 펼칠 기회를 만나고 한 걸음 더 나아가길 바라요." },
+  { id: "exam", category: "합격운", clue: "꽃 핀 책장", name: "합격부적", motif: "펼친 책과 꽃 핀 매화 가지", wish: "준비한 만큼 마음껏 실력을 펼치길 바라요." },
+  { id: "health", category: "건강운", clue: "늘 푸른 나무", name: "건강장수부적", motif: "소나무와 영지버섯", wish: "몸과 마음이 튼튼하고 일상에 활기가 넘치길 바라요." },
+  { id: "home", category: "가정 평안", clue: "따뜻한 처마", name: "가택평안부적", motif: "한옥 지붕과 둥근 구름", wish: "집으로 돌아오는 길 끝에 따뜻한 평안이 있길 바라요." },
+  { id: "protection", category: "액막이", clue: "어둠 속 두 눈", name: "호랑이 액막이부적", motif: "정면을 바라보는 민화풍 호랑이", wish: "걱정은 가벼워지고 하루를 씩씩하게 보내길 바라요." },
+  { id: "wish", category: "소원 성취", clue: "달에게 건넨 말", name: "소원성취부적", motif: "초승달과 세 개의 별", wish: "오래 품은 소원에 오늘 한 발짝 가까워지길 바라요." }
 ];
 
 const { randomIndex, wireToolbar, wireLever } = window.luckyDrawControls;
@@ -111,7 +111,7 @@ function completeSpin() {
   draw.disabled = false;
   lever.disabled = false;
   drawLabel.textContent = "다시 뽑기";
-  status.textContent = charm.name + "가 나왔어요.";
+  status.textContent = charm.name + "이 나왔어요.";
 
   resultArt.alt = "노란 종이에 붉게 그린 " + charm.motif;
   resultArt.hidden = false;
