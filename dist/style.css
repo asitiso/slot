@@ -265,23 +265,17 @@ dialog p { margin: 9px 0 18px; color: var(--muted); line-height: 1.65; word-brea
 .game-link:not(:first-child):hover, .game-link:not(:first-child)[aria-current="page"] { background: #f1e8fb; border-color: #e7d8f5; color: #653e9e; }
 .game-link:first-child:hover { color: #653e9e; }
 
-@media (max-width: 430px) {
-  .topbar-inner { gap: 7px; }
-  .game-nav { gap: 2px; }
-  .game-link { gap: 6px; padding-inline: 8px; font-size: 14px; }
-  .game-link:first-child { font-size: 15px; padding-right: 5px; }
-  .game-link .brand-icon { width: 33px; height: 33px; }
-  .game-link .brand-icon .icon { width: 19px; height: 19px; }
-  .toolbar { gap: 5px; }
-  .tool-button { min-width: 38px; gap: 5px; padding-inline: 7px; }
-}
-@media (max-width: 350px) { .toolbar #sound span { display: none; } }
-@media (max-width: 485px) {
+@media (max-width: 600px) {
   .toolbar #sound span { display: none; }
 }
-@media (max-width: 380px) {
-  .game-link, .game-link:first-child { padding-inline: 5px; font-size: 14px; }
-  .game-link:not([aria-current="page"]):first-child { padding-left: 0; }
-  .game-link .brand-icon { display: none; }
-  .toolbar .tool-button { min-width: 35px; padding-inline: 5px; }
+
+@media (max-width: 525px) {
+  .topbar-inner { position: relative; display: block; padding-block: 6px 8px; }
+  .game-nav { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; }
+  .game-nav > .game-link:first-child { grid-column: 1 / -1; justify-self: start; margin-right: 90px; padding-left: 0; font-size: 16px; }
+  .game-nav .brand-icon { width: 32px; height: 32px; }
+  .game-nav .brand-icon .icon { width: 19px; height: 19px; }
+  .game-nav > .game-link:not(:first-child) { justify-content: center; min-height: 40px; padding-inline: 4px; font-size: 14px; }
+  .topbar-inner .toolbar { position: absolute; right: 0; top: 6px; gap: 5px; }
+  .toolbar .tool-button { min-width: 40px; padding-inline: 6px; }
 }
